@@ -1,0 +1,33 @@
+﻿@page "/weather"
+@inject HttpClient _http
+
+@if (objWeather is not null)
+{
+    <h1>Name: @objWeather.Name</h1>
+    <h3>Country: @objWeather.Sys.Country</h3>
+
+    <br />
+    <br />
+
+    <h2>@objWeather.Weather[0].Main</h2>
+    <h3>@objWeather.Weather[0].Description</h3>
+
+    <br />
+    <br />
+
+    <h2>Temp: @(Math.Round(objWeather.Main.Temp - 273.15).ToString())<span>&#176;</span>C</h2>
+    <h3>FeelsLike: @(Math.Round(objWeather.Main.FeelsLike - 273.15).ToString())<span>&#176;</span>C</h3>
+    <h3>Humidity: @objWeather.Main.Humidity %</h3>
+}
+
+
+
+@code {
+    private WeatherModel.Root? objWeather;
+
+    protected override async Task OnInitializedAsync()
+    {
+        objWeather = await _http.GetFromJsonAsync<WeatherModel.Root>("https://simpleweatherfunction.azurewebsites.net/api/GetWeather?code=ab1dWBghn14xKlYQ8A_wXjNa7qveMhL2VsCJlx1S4d8kAzFu4Y3GfA==");
+    }
+
+}
